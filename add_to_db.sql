@@ -4,7 +4,7 @@ create table user_data (
 	pass VARCHAR
 );
 
-insert into user_data
+insert into user_data (id, uname, pass)
 values  (1, 'soulcatcher', 'securepass');
 
 insert into user_data (uname, pass)
