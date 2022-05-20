@@ -5,7 +5,7 @@ n.name as title,
 n.note_body,
 n.visibility 
 from notes n
-join users u on u.id = n.owner_id ; 
+join users u on u.id = n.owner_id; 
 
 
 
