@@ -12,10 +12,14 @@ create table users ( -- make the users
     lname       varchar not null,                                       -- last name
     email       varchar unique not null,                                -- email
     uname       varchar unique not null check (length(uname) > 3),      -- username
-    pword       varchar not null check (length(pword) > 3)              -- password
+    pword       varchar not null check (length(pword) > 3),             -- password
     role_id     int                                                     -- access role they have
 );
 
 create table notes (
-    id      int generated always as identity primary key
+    id          int generated always as identity primary key,
+    name        varchar not null,
+    note_body   varchar not null,
+    owner_id    int,
+    visibility  int
 );
