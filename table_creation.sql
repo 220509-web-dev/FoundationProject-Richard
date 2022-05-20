@@ -13,7 +13,11 @@ create table users ( -- make the users
     email       varchar unique not null,                                -- email
     uname       varchar unique not null check (length(uname) > 3),      -- username
     pword       varchar not null check (length(pword) > 3),             -- password
-    role_id     int                                                     -- access role they have
+    role_id     int,                                                    -- access role they have
+
+    constraint user_access_fk
+    foreign key (role_id)
+    references user_access(id)
 );
 
 create table notes (
@@ -21,5 +25,9 @@ create table notes (
     name        varchar not null,
     note_body   varchar not null,
     owner_id    int,
-    visibility  int
+    visibility  int,
+
+    constraint owner_id_fk
+    foreign key (owner_id)
+    references users(id)
 );
