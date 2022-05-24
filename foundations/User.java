@@ -64,3 +64,7 @@ public class User {
         this.username = username;
     }
 }
+
+class Roles {
+    // Do I need this?
+}
