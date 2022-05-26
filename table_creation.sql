@@ -25,7 +25,7 @@ create table notes (
     name        varchar not null,
     note_body   varchar not null,
     owner_id    int,
-    visibility  int,
+    visible     boolean,
 
     constraint owner_id_fk
     foreign key (owner_id)
