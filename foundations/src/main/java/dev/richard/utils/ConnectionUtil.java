@@ -12,8 +12,8 @@ public class ConnectionUtil {
     public static Connection getConnection() {
         try {
             String dbInfo = System.getenv("DB_CONNECTION");
-            Connection c = DriverManager.getConnection(dbInfo);
-            return c;
+            return DriverManager.getConnection(dbInfo);
+
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
