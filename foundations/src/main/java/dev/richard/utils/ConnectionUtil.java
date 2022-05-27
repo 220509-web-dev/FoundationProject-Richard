@@ -7,7 +7,7 @@ public class ConnectionUtil {
 
     /**
      * Attempts a connection to the Postgres database. Requires that the DB_CONNECTION variable is set correctly.
-     * @return connection
+     * @return java.sql.Connection
      */
     public static Connection getConnection() {
         try {

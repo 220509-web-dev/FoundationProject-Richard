@@ -13,6 +13,16 @@ public class User {
 
     }
 
+    /**
+     * Constructor for making a new user.
+     * @param userId
+     * @param firstName
+     * @param lastName
+     * @param email
+     * @param username
+     * @param password
+     * @param roleId
+     */
     public User(int userId, String firstName, String lastName, String email, String username, String password, int roleId) {
         this.userId = userId;
         this.firstName = firstName;

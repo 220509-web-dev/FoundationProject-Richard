@@ -7,10 +7,10 @@ public interface UserDAO {
     // Create
     User createUser(User user);
     // Read
-    User getUserById(User user);
+    User getUserById(int id);
     List<User> getAllUsers();
     // Update
     User updateUser(User user);
     // Delete
-    User deleteUser(User user);
+    User deleteUserById(int id);
 }
