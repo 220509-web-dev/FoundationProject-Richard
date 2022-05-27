@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserDaoPostgres implements UserDAO {
-
     @Override
     public User createUser(User user) {
         try (Connection c = ConnectionUtil.getConnection()) {
