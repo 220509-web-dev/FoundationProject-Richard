@@ -86,6 +86,8 @@ public class UserDaoPostgres implements UserDAO {
             ps.setString(4, user.getUsername());
             ps.setString(5, user.getPassword());
             ps.setInt(6, user.getRoleId());
+            ps.setInt(7, user.getUserId());
+
             ps.execute();
 
             return user;
