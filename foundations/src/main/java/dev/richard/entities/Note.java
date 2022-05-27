@@ -57,4 +57,15 @@ public class Note {
     public void setVisibility(boolean visibility) {
         this.visibility = visibility;
     }
+
+    @Override
+    public String toString() {
+        return "Note{" +
+                "noteId=" + noteId +
+                ", noteTitle='" + noteTitle + '\'' +
+                ", noteBody='" + noteBody + '\'' +
+                ", ownerId=" + ownerId +
+                ", visibility=" + visibility +
+                '}';
+    }
 }
