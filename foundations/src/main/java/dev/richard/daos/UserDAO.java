@@ -21,6 +21,12 @@ public interface UserDAO {
 
     User getUserById(int id);
 
+    /**
+     * Grabs a user in the database by their username.
+     * @param username The username to use.
+     * @return dev.richard.entities.User
+     */
+
     User getUserByUsername(String username);
 
     /**
