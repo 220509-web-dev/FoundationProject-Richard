@@ -55,6 +55,23 @@ public class UserDaoPostgres implements UserDAO {
     }
 
     @Override
+    public User getUserByUsername(String username) {
+        try (Connection c = ConnectionUtil.getConnection()) {
+        String query = "select * from users where uname = ?";
+        PreparedStatement ps = c.prepareStatement(query);
+
+        ps.setString(1, username);
+        ResultSet rs = ps.executeQuery();
+        rs.next();
+
+        return new User(rs.getInt("id"), rs.getString("fname"), rs.getString("lname"), rs.getString("email"), username, rs.getString("pword"), rs.getInt("role_id"));
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    @Override
     public List<User> getAllUsers() {
         try (Connection c = ConnectionUtil.getConnection()) {
             String query = "select * from users";

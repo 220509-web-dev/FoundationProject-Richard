@@ -21,6 +21,8 @@ public interface UserDAO {
 
     User getUserById(int id);
 
+    User getUserByUsername(String username);
+
     /**
      * Gets all users in the database.
      * @return java.util.List

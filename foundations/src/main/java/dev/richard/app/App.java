@@ -38,5 +38,8 @@ public class App {
         if (removedUser == null) System.out.println("User deleted successfully");
         else System.err.println("Something bad happened. Oops.");
 */
+        System.out.println("Attempting to find user with the username soulcatcher...");
+        User user = userDAO.getUserByUsername("soulcatcher");
+        if (user != null) System.out.printf("Successfully found! User info: %s", user);
     }
 }
