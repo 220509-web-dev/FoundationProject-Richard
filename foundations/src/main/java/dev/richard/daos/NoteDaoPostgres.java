@@ -24,7 +24,7 @@ public class NoteDaoPostgres implements NoteDAO {
     }
 
     @Override
-    public List getNoteByAuthors(String username) {
+    public List getAllNotesByAuthor(String username) {
         return null;
     }
 

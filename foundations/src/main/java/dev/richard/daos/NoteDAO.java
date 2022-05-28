@@ -11,7 +11,7 @@ public interface NoteDAO {
      */
     Note createNote(Note note);
     Note getNoteById(int id);
-    List getNoteByAuthors(String username);
+    List getAllNotesByAuthor(String username);
     List getAllNotes();
     Note updateNote(Note note);
     Note deleteNoteById(Note note);
