@@ -3,8 +3,7 @@ package dev.richard.daos;
 import dev.richard.entities.Note;
 import dev.richard.utils.ConnectionUtil;
 
-import java.sql.Connection;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.List;
 
 public class NoteDaoPostgres implements NoteDAO {
@@ -12,6 +11,22 @@ public class NoteDaoPostgres implements NoteDAO {
     @Override
     public Note createNote(Note note) {
         try (Connection c = ConnectionUtil.getConnection()) {
+            String query = "insert into notes values (default, ?, ?, ?, ?)";
+            PreparedStatement ps = c.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+
+            ps.setString(1, note.getNoteTitle());
+            ps.setString(2, note.getNoteBody());
+            ps.setInt(3, note.getOwnerId());
+            ps.setBoolean(4, note.isVisible());
+
+            ps.execute();
+            ResultSet rs = ps.getGeneratedKeys();
+            rs.next();
+
+            int noteId = rs.getInt("id");
+            note.setNoteId(noteId);
+            return note;
+
         } catch (SQLException e) {
             e.printStackTrace();
         }

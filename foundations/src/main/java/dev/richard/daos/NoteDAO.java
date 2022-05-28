@@ -5,7 +5,7 @@ import java.util.List;
 
 public interface NoteDAO {
     /**
-     * Puts a new note ito the database.
+     * Puts a new note into the database.
      * @param note The note to add to the database.
      * @return dev.richard.entities.Note
      */
