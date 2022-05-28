@@ -13,37 +13,5 @@ public class App {
         Connection c = ConnectionUtil.getConnection();
         UserDAO userDAO = new UserDaoPostgres();
 
-/*      Used for testing user creation -- SUCCEEDED
-        System.out.printf("Last user before: %s\n", userDAO.getAllUsers().get(userDAO.getAllUsers().size() - 1));
-        User user = new User(0, "Aweriusz", "Dogwoski", "bark@avery.dog", "adalbert", "testing", 1);
-        userDAO.createUser(user);
-
-        System.out.printf("Last user after: %s\n", userDAO.getAllUsers().get(userDAO.getAllUsers().size() - 1));
-*/
-
-/*      Used for testing user modification -- SUCCEEDED
-        User user = userDAO.getUserById(3); // get avery
-        System.out.printf("Old username is %s, ", user.getUsername());
-        user.setUsername("aweriusz.dogwoski");
-        userDAO.updateUser(user);
-
-        User updatedUser = userDAO.getUserById(3);
-        System.out.printf("new username is %s", updatedUser.getUsername());
-*/
-
-/*      Used for testing user deletion -- SUCCEEDED
-        System.out.printf("Attempting to delete user %s...\n", userDAO.getUserById(3).getUsername());
-        User removedUser = userDAO.deleteUserById(3);
-
-        if (removedUser == null) System.out.println("User deleted successfully");
-        else System.err.println("Something bad happened. Oops.");
-*/
-
-/*
-        Used for testing user searching by username -- SUCCEEDED
-        System.out.println("Attempting to find user with the username soulcatcher...");
-        User user = userDAO.getUserByUsername("soulcatcher");
-        if (user != null) System.out.printf("Successfully found! User info: %s", user);
-*/
     }
 }
