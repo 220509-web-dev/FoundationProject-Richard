@@ -9,6 +9,8 @@ public class User {
     private String password;
     private int roleId;
 
+    private Roles roleType;
+
     public User() {
 
     }
@@ -21,16 +23,16 @@ public class User {
      * @param email
      * @param username
      * @param password
-     * @param roleId
+     * @param roleType
      */
-    public User(int userId, String firstName, String lastName, String email, String username, String password, int roleId) {
+    public User(int userId, String firstName, String lastName, String email, String username, String password, Roles roleType) {
         this.userId = userId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.username = username;
         this.password = password;
-        this.roleId = roleId;
+        this.roleType = roleType;
     }
 
     public int getUserId() {
@@ -81,8 +83,16 @@ public class User {
         this.password = password;
     }
 
+    public Roles getRoleType() {
+        return roleType;
+    }
+
+    public void setRoleType(Roles roleType) {
+        this.roleType = roleType;
+    }
+
     public int getRoleId() {
-        return roleId;
+        return roleType.Value;
     }
 
     public void setRoleId(int roleId) {

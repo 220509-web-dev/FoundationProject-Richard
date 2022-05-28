@@ -1,5 +1,6 @@
 package dev.richard.daos;
 
+import dev.richard.entities.Roles;
 import dev.richard.entities.User;
 import dev.richard.utils.ConnectionUtil;
 
@@ -46,7 +47,7 @@ public class UserDaoPostgres implements UserDAO {
 
             rs.next();
 
-            return new User(id, rs.getString("fname"), rs.getString("lname"), rs.getString("email"), rs.getString("uname"), rs.getString("pword"), rs.getInt("role_id"));
+            return new User(id, rs.getString("fname"), rs.getString("lname"), rs.getString("email"), rs.getString("uname"), rs.getString("pword"), Roles.from(rs.getInt("role_id")));
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -64,7 +65,7 @@ public class UserDaoPostgres implements UserDAO {
         ResultSet rs = ps.executeQuery();
         rs.next();
 
-        return new User(rs.getInt("id"), rs.getString("fname"), rs.getString("lname"), rs.getString("email"), username, rs.getString("pword"), rs.getInt("role_id"));
+        return new User(rs.getInt("id"), rs.getString("fname"), rs.getString("lname"), rs.getString("email"), username, rs.getString("pword"), Roles.from(rs.getInt("role_id")));
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -80,7 +81,7 @@ public class UserDaoPostgres implements UserDAO {
 
             List<User> users = new ArrayList<>();
             while (rs.next()) {
-                User u = new User(rs.getInt("id"), rs.getString("fname"), rs.getString("lname"), rs.getString("email"), rs.getString("uname"), rs.getString("pword"), rs.getInt("role_id"));
+                User u = new User(rs.getInt("id"), rs.getString("fname"), rs.getString("lname"), rs.getString("email"), rs.getString("uname"), rs.getString("pword"), Roles.from(rs.getInt("role_id")));
                 users.add(u);
             }
             return users;
