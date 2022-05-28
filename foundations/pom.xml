@@ -19,5 +19,12 @@
             <artifactId>postgresql</artifactId>
             <version>42.3.6</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-engine -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.9.0-M1</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 </project>
