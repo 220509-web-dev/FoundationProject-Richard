@@ -15,6 +15,5 @@ public class App {
     public static void main(String[] args) {
         Connection c = ConnectionUtil.getConnection();
         UserDAO userDAO = new UserDaoPostgres();
-        LoggerUtil.log("This is a test", LogLevel.INFO);
     }
 }

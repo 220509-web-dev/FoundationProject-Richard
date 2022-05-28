@@ -8,6 +8,8 @@ public enum Roles {
     PREMIUM(2),
     ADMIN(3);
     public final int Value;
+    public static final int size = values().length;
+
 
     Roles(int value) {
         Value = value;
@@ -21,5 +23,9 @@ public enum Roles {
     }
     public static Roles from(int value) {
         return ROLES_MAP.get(value);
+    }
+
+    public static Map<Integer, Roles> getAllRoles() {
+        return ROLES_MAP;
     }
 }
