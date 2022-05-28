@@ -1,5 +1,8 @@
 package dev.richard.utils;
 
-public enum LogLevels {
-
+public enum LogLevel {
+    INFO,
+    ERROR,
+    WARNING,
+    DEBUG
 }
