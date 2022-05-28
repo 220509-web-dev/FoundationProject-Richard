@@ -12,7 +12,7 @@ public enum Roles {
     Roles(int value) {
         Value = value;
     }
-    // map the values of the role in the db to a friendlier rep
+    // map the values of the role in the db to a friendlier representation
     static final Map<Integer, Roles> ROLES_MAP = new HashMap<>();
 
     static {
