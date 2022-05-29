@@ -79,7 +79,7 @@ public class UserDaoPostgres implements UserDAO {
         ResultSet rs = ps.executeQuery();
         rs.next();
 
-        User u = new User(id, rs.getString("fname"), rs.getString("lname"), rs.getString("email"), rs.getString("uname"), rs.getString("pword"), Roles.from(rs.getInt("role_id")));
+        User u = new User(rs.getInt("id"), rs.getString("fname"), rs.getString("lname"), rs.getString("email"), rs.getString("uname"), rs.getString("pword"), Roles.from(rs.getInt("role_id")));
         logString = String.format("Retrieved user %s.", u.getUsername());
 
         LoggerUtil.log(logString, LogLevel.INFO);
