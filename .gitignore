@@ -1,9 +1,10 @@
-foundations/.idea
+
 foundations/.idea/**/workspace.xml
 foundations/.idea/**/tasks.xml
 foundations/.idea/**/usage.statistics.xml
 foundations/.idea/**/dictionaries
 foundations/.idea/**/shelf
+foundations/.idea/**/discord.xml
 
 out/
 foundations/target/
