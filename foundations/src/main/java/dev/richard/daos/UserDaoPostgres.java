@@ -62,6 +62,7 @@ public class UserDaoPostgres implements UserDAO {
 
         } catch (SQLException e) {
             logString = String.format("Could not retrieve user. More information: %s", ExceptionUtils.getStackTrace(e));
+            LoggerUtil.log(logString, LogLevel.ERROR);
             e.printStackTrace();
 
         }
@@ -78,10 +79,17 @@ public class UserDaoPostgres implements UserDAO {
         ResultSet rs = ps.executeQuery();
         rs.next();
 
-        return new User(rs.getInt("id"), rs.getString("fname"), rs.getString("lname"), rs.getString("email"), username, rs.getString("pword"), Roles.from(rs.getInt("role_id")));
+        User u = new User(id, rs.getString("fname"), rs.getString("lname"), rs.getString("email"), rs.getString("uname"), rs.getString("pword"), Roles.from(rs.getInt("role_id")));
+        logString = String.format("Retrieved user %s.", u.getUsername());
+
+        LoggerUtil.log(logString, LogLevel.INFO);
+        return u;
 
         } catch (SQLException e) {
+            logString = String.format("Could not retrieve user. More information: %s", ExceptionUtils.getStackTrace(e));
+            LoggerUtil.log(logString, LogLevel.ERROR);
             e.printStackTrace();
+
         }
         return null;
     }
@@ -97,9 +105,13 @@ public class UserDaoPostgres implements UserDAO {
                 User u = new User(rs.getInt("id"), rs.getString("fname"), rs.getString("lname"), rs.getString("email"), rs.getString("uname"), rs.getString("pword"), Roles.from(rs.getInt("role_id")));
                 users.add(u);
             }
+            logString = "Retrieved all users in the database.";
+            LoggerUtil.log(logString, LogLevel.INFO);
             return users;
         } catch (SQLException e) {
+            logString = String.format("Could not retrieve all users in the database. More information: %s", ExceptionUtils.getStackTrace(e));
             e.printStackTrace();
+            LoggerUtil.log(logString, LogLevel.ERROR);
         }
         return null;
     }
@@ -109,6 +121,7 @@ public class UserDaoPostgres implements UserDAO {
         try (Connection c = ConnectionUtil.getConnection()) {
             String query = "update users set fname = ?, lname = ?, email = ?, uname = ?, pword = ?, role_id = ? where id = ?";
             PreparedStatement ps = c.prepareStatement(query);
+            User oldUser = user;
 
             ps.setString(1, user.getFirstName());
             ps.setString(2, user.getLastName());
@@ -119,10 +132,14 @@ public class UserDaoPostgres implements UserDAO {
             ps.setInt(7, user.getUserId());
 
             ps.execute();
-
+            logString = String.format("Updated user successfully. Old user information: %s, new user information: %s", oldUser, user);
+            LoggerUtil.log(logString, LogLevel.INFO);
             return user;
+
         } catch (SQLException e) {
+            logString = String.format("Failed to update user. More information: %s", ExceptionUtils.getStackTrace(e));
             e.printStackTrace();
+            LoggerUtil.log(logString, LogLevel.ERROR);
         }
         return null;
     }
