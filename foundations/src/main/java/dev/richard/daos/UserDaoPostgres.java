@@ -3,6 +3,9 @@ package dev.richard.daos;
 import dev.richard.entities.Roles;
 import dev.richard.entities.User;
 import dev.richard.utils.ConnectionUtil;
+import dev.richard.utils.LogLevel;
+import dev.richard.utils.LoggerUtil;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -29,10 +32,12 @@ public class UserDaoPostgres implements UserDAO {
 
             int newId = rs.getInt("id");
             user.setUserId(newId);
+            LoggerUtil.log(String.format("Added new role with the username %s and id of %d", user.getUsername(), user.getUserId()), LogLevel.INFO);
             return user;
 
         } catch (SQLException e) {
             e.printStackTrace();
+            LoggerUtil.log(String.format("An error has occurred while attempting to make user with the username of %s and id of %d. Exception details: %s", user.getUsername(), user.getUserId(), ExceptionUtils.getStackTrace(e)), LogLevel.ERROR);
         }
         return null;
     }
