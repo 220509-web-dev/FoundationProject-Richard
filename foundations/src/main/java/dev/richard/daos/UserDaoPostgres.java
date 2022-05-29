@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserDaoPostgres implements UserDAO {
+    private String logString;
     @Override
     public User createUser(User user) {
         try (Connection c = ConnectionUtil.getConnection()) {
@@ -32,12 +33,14 @@ public class UserDaoPostgres implements UserDAO {
 
             int newId = rs.getInt("id");
             user.setUserId(newId);
-            LoggerUtil.log(String.format("Added new role with the username %s and id of %d", user.getUsername(), user.getUserId()), LogLevel.INFO);
+            logString = String.format("Added new user with the username %s and id of %d", user.getUsername(), user.getUserId());
+            LoggerUtil.log(logString, LogLevel.INFO);
             return user;
 
         } catch (SQLException e) {
+            logString = String.format("An error has occurred while attempting to make user with the username of %s and id of %d. Exception details: %s", user.getUsername(), user.getUserId(), ExceptionUtils.getStackTrace(e));
             e.printStackTrace();
-            LoggerUtil.log(String.format("An error has occurred while attempting to make user with the username of %s and id of %d. Exception details: %s", user.getUsername(), user.getUserId(), ExceptionUtils.getStackTrace(e)), LogLevel.ERROR);
+            LoggerUtil.log(logString, LogLevel.ERROR);
         }
         return null;
     }
@@ -51,8 +54,11 @@ public class UserDaoPostgres implements UserDAO {
             ResultSet rs = ps.executeQuery();
 
             rs.next();
+            User u = new User(id, rs.getString("fname"), rs.getString("lname"), rs.getString("email"), rs.getString("uname"), rs.getString("pword"), Roles.from(rs.getInt("role_id")));
+            logString = String.format("Retrieved user %s.", u.getUsername());
 
-            return new User(id, rs.getString("fname"), rs.getString("lname"), rs.getString("email"), rs.getString("uname"), rs.getString("pword"), Roles.from(rs.getInt("role_id")));
+            LoggerUtil.log(logString, LogLevel.INFO);
+            return u;
 
         } catch (SQLException e) {
             e.printStackTrace();

@@ -23,7 +23,7 @@ public class LoggerUtil {
                 logInfo = String.format("%s - %s - %s\n",level.name(), "Log file created.", LocalDateTime.now());
                 Files.write(Paths.get(System.getenv("LOG_FILE")), logInfo.getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE_NEW);
             }
-            logInfo = String.format("%s - %s - %s",level.name(), message, LocalDateTime.now());
+            logInfo = String.format("%s - %s - %s\n",level.name(), message, LocalDateTime.now());
             Files.write(Paths.get(System.getenv("LOG_FILE")), logInfo.getBytes(StandardCharsets.UTF_8), StandardOpenOption.APPEND);
         } catch (IOException e) {
             e.printStackTrace();
