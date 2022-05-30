@@ -1,13 +1,12 @@
 package dev.richard.daos;
 
 import dev.richard.entities.Note;
-import dev.richard.utils.ConnectionUtil;
+import dev.richard.utils.*;
 
 import java.sql.*;
 import java.util.List;
-
 public class NoteDaoPostgres implements NoteDAO {
-
+    private String logString;
     @Override
     public Note createNote(Note note) {
         try (Connection c = ConnectionUtil.getConnection()) {

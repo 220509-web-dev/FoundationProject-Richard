@@ -13,9 +13,12 @@ import java.util.List;
 
 public class UserDaoPostgres implements UserDAO {
     private String logString;
+
     @Override
     public User createUser(User user) {
         try (Connection c = ConnectionUtil.getConnection()) {
+            logString = String.format("Attempting to create new user with id of %d...", user.getUserId());
+            LoggerUtil.log(logString, LogLevel.INFO);
             String query = "insert into foundation_app.users values (default, ?, ?, ?, ?, ?, ?)";
             PreparedStatement ps = c.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 
@@ -48,6 +51,8 @@ public class UserDaoPostgres implements UserDAO {
     @Override
     public User getUserById(int id) {
         try (Connection c = ConnectionUtil.getConnection()) {
+            logString = String.format("Attempting to retrieve user with id of %d...", id);
+            LoggerUtil.log(logString, LogLevel.INFO);
             String query = "select * from users where id = ?";
             PreparedStatement ps = c.prepareStatement(query);
             ps.setInt(1, id);
@@ -72,18 +77,20 @@ public class UserDaoPostgres implements UserDAO {
     @Override
     public User getUserByUsername(String username) {
         try (Connection c = ConnectionUtil.getConnection()) {
-        String query = "select * from users where uname = ?";
-        PreparedStatement ps = c.prepareStatement(query);
+            logString = String.format("Attempting to retrieve user with username of %s...", username);
+            LoggerUtil.log(logString, LogLevel.INFO);
+            String query = "select * from users where uname = ?";
+            PreparedStatement ps = c.prepareStatement(query);
 
-        ps.setString(1, username);
-        ResultSet rs = ps.executeQuery();
-        rs.next();
+            ps.setString(1, username);
+            ResultSet rs = ps.executeQuery();
+            rs.next();
 
-        User u = new User(rs.getInt("id"), rs.getString("fname"), rs.getString("lname"), rs.getString("email"), rs.getString("uname"), rs.getString("pword"), Roles.from(rs.getInt("role_id")));
-        logString = String.format("Retrieved user %s.", u.getUsername());
+            User u = new User(rs.getInt("id"), rs.getString("fname"), rs.getString("lname"), rs.getString("email"), rs.getString("uname"), rs.getString("pword"), Roles.from(rs.getInt("role_id")));
+            logString = String.format("Retrieved user %s.", u.getUsername());
 
-        LoggerUtil.log(logString, LogLevel.INFO);
-        return u;
+            LoggerUtil.log(logString, LogLevel.INFO);
+            return u;
 
         } catch (SQLException e) {
             logString = String.format("Could not retrieve user. More information: %s", ExceptionUtils.getStackTrace(e));
@@ -93,9 +100,12 @@ public class UserDaoPostgres implements UserDAO {
         }
         return null;
     }
+
     @Override
     public List<User> getAllUsers() {
         try (Connection c = ConnectionUtil.getConnection()) {
+            logString = "Attempting to retrieve all the users in the database...";
+            LoggerUtil.log(logString, LogLevel.INFO);
             String query = "select * from users";
             PreparedStatement ps = c.prepareStatement(query);
             ResultSet rs = ps.executeQuery();
@@ -119,6 +129,8 @@ public class UserDaoPostgres implements UserDAO {
     @Override
     public User updateUser(User user) {
         try (Connection c = ConnectionUtil.getConnection()) {
+            logString = String.format("Attempting to update user with id of %d", user.getUserId());
+            LoggerUtil.log(logString, LogLevel.INFO);
             String query = "update users set fname = ?, lname = ?, email = ?, uname = ?, pword = ?, role_id = ? where id = ?";
             PreparedStatement ps = c.prepareStatement(query);
             User oldUser = user;
@@ -147,16 +159,34 @@ public class UserDaoPostgres implements UserDAO {
     @Override
     public User deleteUserById(int id) {
         try (Connection c = ConnectionUtil.getConnection()) {
-        String query = "delete from users where id = ?";
-        PreparedStatement ps = c.prepareStatement(query);
-
-        ps.setInt(1, id);
-        ps.execute();
-
+            logString = String.format("Attempting to delete user with id of %d...", id);
+            String query = "delete from users where id = ?";
+            PreparedStatement ps = c.prepareStatement(query);
+            ps.setInt(1, id);
+            ps.execute();
+            logString = String.format("Deleted user with id of %d successfully.", id);
         } catch (SQLException e) {
+            logString = String.format("Failed to delete user. More information: %s", ExceptionUtils.getStackTrace(e));
+            LoggerUtil.log(logString, LogLevel.ERROR);
             e.printStackTrace();
         }
+        return null;
+    }
 
+    @Override
+    public User deleteUserByUsername(String username) {
+        try (Connection c = ConnectionUtil.getConnection()) {
+            logString = String.format("Attempting to delete user with username of %s...", username);
+            String query = "delete from users where uname = ?";
+            PreparedStatement ps = c.prepareStatement(query);
+            ps.setString(1, username);
+            ps.execute();
+            logString = String.format("Deleted user with username of %s successfully.", id);
+        } catch (SQLException e) {
+            logString = String.format("Failed to delete user. More information: %s", ExceptionUtils.getStackTrace(e));
+            LoggerUtil.log(logString, LogLevel.ERROR);
+            e.printStackTrace();
+        }
         return null;
     }
 }

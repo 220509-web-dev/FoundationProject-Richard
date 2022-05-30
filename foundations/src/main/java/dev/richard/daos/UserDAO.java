@@ -50,4 +50,5 @@ public interface UserDAO {
      * @return null if successful
      */
     User deleteUserById(int id);
+    User deleteUserByUsername(String username);
 }
