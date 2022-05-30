@@ -181,7 +181,7 @@ public class UserDaoPostgres implements UserDAO {
             PreparedStatement ps = c.prepareStatement(query);
             ps.setString(1, username);
             ps.execute();
-            logString = String.format("Deleted user with username of %s successfully.", id);
+            logString = String.format("Deleted user with username of %s successfully.", username);
         } catch (SQLException e) {
             logString = String.format("Failed to delete user. More information: %s", ExceptionUtils.getStackTrace(e));
             LoggerUtil.log(logString, LogLevel.ERROR);
