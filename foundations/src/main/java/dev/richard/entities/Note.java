@@ -1,5 +1,7 @@
 package dev.richard.entities;
 
+import java.util.Objects;
+
 public class Note {
     private int noteId;
     private String noteTitle;
@@ -67,5 +69,18 @@ public class Note {
                 ", ownerId=" + ownerId +
                 ", visibility=" + visibility +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Note note = (Note) o;
+        return noteId == note.noteId && ownerId == note.ownerId && visibility == note.visibility && Objects.equals(noteTitle, note.noteTitle) && Objects.equals(noteBody, note.noteBody);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(noteId, noteTitle, noteBody, ownerId, visibility);
     }
 }

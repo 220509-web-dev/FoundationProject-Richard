@@ -36,7 +36,7 @@ public class NoteDaoPostgres implements NoteDAO {
             return note;
 
         } catch (SQLException e) {
-            logString = String.format("Could not add note to the database. More information: %s", ExceptionUtils.getStackTrace(e));
+            logString = String.format("Could not add note to the database. More information: %s", ExceptionUtils.getMessage(e));
             LoggerUtil.log(logString, LogLevel.ERROR);
             e.printStackTrace();
         }
@@ -59,7 +59,7 @@ public class NoteDaoPostgres implements NoteDAO {
             LoggerUtil.log(logString, LogLevel.INFO);
             return n;
         } catch (SQLException e) {
-            logString = String.format("Failed to retrieve note. More information: %s", ExceptionUtils.getStackTrace(e));
+            logString = String.format("Failed to retrieve note. More information: %s", ExceptionUtils.getMessage(e));
             LoggerUtil.log(logString, LogLevel.ERROR);
             e.printStackTrace();
         }
@@ -86,7 +86,7 @@ public class NoteDaoPostgres implements NoteDAO {
             LoggerUtil.log(logString, LogLevel.INFO);
         return allNotes;
         } catch (SQLException e) {
-            logString = String.format("Could not retrieve all notes from the user. More information: %s", ExceptionUtils.getStackTrace(e));
+            logString = String.format("Could not retrieve all notes from the user. More information: %s", ExceptionUtils.getMessage(e));
             LoggerUtil.log(logString, LogLevel.ERROR);
             e.printStackTrace();
         }
@@ -111,7 +111,7 @@ public class NoteDaoPostgres implements NoteDAO {
             }
             return allNotes;
         } catch (SQLException e) {
-            logString = String.format("Could not retrieve all notes from the user. More information: %s", ExceptionUtils.getStackTrace(e));
+            logString = String.format("Could not retrieve all notes from the user. More information: %s", ExceptionUtils.getMessage(e));
             LoggerUtil.log(logString, LogLevel.ERROR);
             e.printStackTrace();
         }
@@ -134,7 +134,7 @@ public class NoteDaoPostgres implements NoteDAO {
             }
             return allNotes;
         } catch (SQLException e) {
-            logString = String.format("Could not retrieve all notes from the database. More information: %s", ExceptionUtils.getStackTrace(e));
+            logString = String.format("Could not retrieve all notes from the database. More information: %s", ExceptionUtils.getMessage(e));
             LoggerUtil.log(logString, LogLevel.ERROR);
             e.printStackTrace();
         }
@@ -161,7 +161,7 @@ public class NoteDaoPostgres implements NoteDAO {
             return note;
 
         } catch (SQLException e) {
-            logString = String.format("An error occurred while attempting to update note. More information: %s", ExceptionUtils.getStackTrace(e));
+            logString = String.format("An error occurred while attempting to update note. More information: %s", ExceptionUtils.getMessage(e));
             e.printStackTrace();
         }
         return null;
@@ -176,7 +176,7 @@ public class NoteDaoPostgres implements NoteDAO {
             ps.setInt(1, note.getNoteId());
 
         } catch (SQLException e) {
-            logString = String.format("An error occurred while attempting to delete note. More information: %s", ExceptionUtils.getStackTrace(e));
+            logString = String.format("An error occurred while attempting to delete note. More information: %s", ExceptionUtils.getMessage(e));
             LoggerUtil.log(logString, LogLevel.ERROR);
             e.printStackTrace();
         }
@@ -192,7 +192,7 @@ public class NoteDaoPostgres implements NoteDAO {
             ps.setInt(1, user.getUserId());
 
         } catch (SQLException e) {
-            logString = String.format("An error occurred while attempting to delete all notes from author. More information: %s", ExceptionUtils.getStackTrace(e));
+            logString = String.format("An error occurred while attempting to delete all notes from author. More information: %s", ExceptionUtils.getMessage(e));
             LoggerUtil.log(logString, LogLevel.ERROR);
             e.printStackTrace();
         }

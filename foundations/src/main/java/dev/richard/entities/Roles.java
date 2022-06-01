@@ -10,7 +10,6 @@ public enum Roles {
     public final int Value;
     public static final int size = values().length;
 
-
     Roles(int value) {
         Value = value;
     }

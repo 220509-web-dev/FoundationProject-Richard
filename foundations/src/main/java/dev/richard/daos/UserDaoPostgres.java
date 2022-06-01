@@ -41,7 +41,7 @@ public class UserDaoPostgres implements UserDAO {
             return user;
 
         } catch (SQLException e) {
-            logString = String.format("An error has occurred while attempting to make user with the username of %s and id of %d. Exception details: %s", user.getUsername(), user.getUserId(), ExceptionUtils.getStackTrace(e));
+            logString = String.format("An error has occurred while attempting to make user with the username of %s and id of %d. Exception details: %s", user.getUsername(), user.getUserId(), ExceptionUtils.getMessage(e));
             e.printStackTrace();
             LoggerUtil.log(logString, LogLevel.ERROR);
         }
@@ -66,7 +66,7 @@ public class UserDaoPostgres implements UserDAO {
             return u;
 
         } catch (SQLException e) {
-            logString = String.format("Could not retrieve user. More information: %s", ExceptionUtils.getStackTrace(e));
+            logString = String.format("Could not retrieve user. More information: %s", ExceptionUtils.getMessage(e));
             LoggerUtil.log(logString, LogLevel.ERROR);
             e.printStackTrace();
 
@@ -93,7 +93,7 @@ public class UserDaoPostgres implements UserDAO {
             return u;
 
         } catch (SQLException e) {
-            logString = String.format("Could not retrieve user. More information: %s", ExceptionUtils.getStackTrace(e));
+            logString = String.format("Could not retrieve user. More information: %s", ExceptionUtils.getMessage(e));
             LoggerUtil.log(logString, LogLevel.ERROR);
             e.printStackTrace();
 
@@ -119,7 +119,7 @@ public class UserDaoPostgres implements UserDAO {
             LoggerUtil.log(logString, LogLevel.INFO);
             return users;
         } catch (SQLException e) {
-            logString = String.format("Could not retrieve all users in the database. More information: %s", ExceptionUtils.getStackTrace(e));
+            logString = String.format("Could not retrieve all users in the database. More information: %s", ExceptionUtils.getMessage(e));
             e.printStackTrace();
             LoggerUtil.log(logString, LogLevel.ERROR);
         }
@@ -149,7 +149,7 @@ public class UserDaoPostgres implements UserDAO {
             return user;
 
         } catch (SQLException e) {
-            logString = String.format("Failed to update user. More information: %s", ExceptionUtils.getStackTrace(e));
+            logString = String.format("Failed to update user. More information: %s", ExceptionUtils.getMessage(e));
             e.printStackTrace();
             LoggerUtil.log(logString, LogLevel.ERROR);
         }
@@ -166,7 +166,7 @@ public class UserDaoPostgres implements UserDAO {
             ps.execute();
             logString = String.format("Deleted user with id of %d successfully.", id);
         } catch (SQLException e) {
-            logString = String.format("Failed to delete user. More information: %s", ExceptionUtils.getStackTrace(e));
+            logString = String.format("Failed to delete user. More information: %s", ExceptionUtils.getMessage(e));
             LoggerUtil.log(logString, LogLevel.ERROR);
             e.printStackTrace();
         }
@@ -183,7 +183,7 @@ public class UserDaoPostgres implements UserDAO {
             ps.execute();
             logString = String.format("Deleted user with username of %s successfully.", username);
         } catch (SQLException e) {
-            logString = String.format("Failed to delete user. More information: %s", ExceptionUtils.getStackTrace(e));
+            logString = String.format("Failed to delete user. More information: %s", ExceptionUtils.getMessage(e));
             LoggerUtil.log(logString, LogLevel.ERROR);
             e.printStackTrace();
         }
