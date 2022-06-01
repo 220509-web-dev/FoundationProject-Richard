@@ -22,6 +22,5 @@ public class UserValidation {
 
     public void checkEmail(String email) {
         userDAO = new UserDaoPostgres();
-
     }
 }
