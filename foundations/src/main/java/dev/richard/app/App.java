@@ -18,10 +18,13 @@ import java.util.List;
 
 public class App {
     public static void main(String[] args) {
-        byte[] test = new byte[16];
-        new SecureRandom().nextBytes(test);
-
-        Password p = new PasswordUtil().generatePassword("this is a test");
-        // System.out.println(new String(p.getHash(), StandardCharsets.UTF_8));
+        Password generated = PasswordUtil.generatePassword("testing");
+        User u = new User(0, "Zumi", "Daxuya", "zumid@testing.com", "zumid", generated.getHash(), generated.getSalt(), Roles.BASIC);
+        try {
+            new UserDaoPostgres().createUser(u);
+            System.out.println("Added!");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

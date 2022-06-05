@@ -33,4 +33,21 @@ public class PasswordUtil {
             return null;
         }
     }
+    public static Password generatePassword(String password, byte[] salt) {
+        SecretKeyFactory factory;
+        SecureRandom random = new SecureRandom();
+        KeySpec keySpec = new PBEKeySpec(password.toCharArray(), salt, 65536, 128);
+        try {
+            factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+            byte[] hash = factory.generateSecret(keySpec).getEncoded();
+            Password generated = new Password(hash, salt);
+            return generated;
+        } catch (NoSuchAlgorithmException e) {
+            LoggerUtil.log(ExceptionUtils.getMessage(e), LogLevel.ERROR);
+            return null;
+        } catch (InvalidKeySpecException e) {
+            LoggerUtil.log(ExceptionUtils.getMessage(e), LogLevel.ERROR);
+            return null;
+        }
+    }
 }

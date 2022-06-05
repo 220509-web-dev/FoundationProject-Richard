@@ -1,10 +1,14 @@
 package dev.richard.daos;
 
+import dev.richard.entities.Password;
 import dev.richard.entities.Roles;
 import dev.richard.entities.User;
+import dev.richard.exceptions.EmailAlreadyUsedException;
+import dev.richard.exceptions.UsernameAlreadyUsedException;
 import dev.richard.utils.ConnectionUtil;
 import dev.richard.utils.LogLevel;
 import dev.richard.utils.LoggerUtil;
+import dev.richard.utils.PasswordUtil;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import java.sql.*;
@@ -19,7 +23,7 @@ public class UserDaoPostgres implements UserDAO {
         try (Connection c = ConnectionUtil.getConnection()) {
             logString = String.format("Attempting to create new user with id of %d...", user.getUserId());
             LoggerUtil.log(logString, LogLevel.INFO);
-            String query = "insert into foundation_app.users values (default, ?, ?, ?, ?, ?, ?)";
+            String query = "insert into users values (default, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement ps = c.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 
             // Get all values from the input
@@ -27,8 +31,9 @@ public class UserDaoPostgres implements UserDAO {
             ps.setString(2, user.getLastName());
             ps.setString(3, user.getEmail());
             ps.setString(4, user.getUsername());
-            ps.setString(5, user.getPassword());
-            ps.setInt(6, user.getRoleId());
+            ps.setBytes(5, user.getPasswordHash());
+            ps.setBytes(6, user.getSalt());
+            ps.setInt(7, user.getRoleId());
 
             ps.execute(); // retrieve the next id
             ResultSet rs = ps.getGeneratedKeys();
@@ -59,7 +64,7 @@ public class UserDaoPostgres implements UserDAO {
             ResultSet rs = ps.executeQuery();
 
             rs.next();
-            User u = new User(id, rs.getString("fname"), rs.getString("lname"), rs.getString("email"), rs.getString("uname"), rs.getString("pword"), Roles.from(rs.getInt("role_id")));
+            User u = new User(rs.getInt("id"), rs.getString("fname"), rs.getString("lname"), rs.getString("email"), rs.getString("uname"), rs.getBytes("hash"), rs.getBytes("salt"), Roles.from(rs.getInt("role_id")));
             logString = String.format("Retrieved user %s.", u.getUsername());
 
             LoggerUtil.log(logString, LogLevel.INFO);
@@ -86,7 +91,7 @@ public class UserDaoPostgres implements UserDAO {
             ResultSet rs = ps.executeQuery();
             rs.next();
 
-            User u = new User(rs.getInt("id"), rs.getString("fname"), rs.getString("lname"), rs.getString("email"), rs.getString("uname"), rs.getString("pword"), Roles.from(rs.getInt("role_id")));
+            User u = new User(rs.getInt("id"), rs.getString("fname"), rs.getString("lname"), rs.getString("email"), rs.getString("uname"), rs.getBytes("hash"), rs.getBytes("salt"), Roles.from(rs.getInt("role_id")));
             logString = String.format("Retrieved user %s.", u.getUsername());
 
             LoggerUtil.log(logString, LogLevel.INFO);
@@ -100,28 +105,52 @@ public class UserDaoPostgres implements UserDAO {
         }
         return null;
     }
+    public User getUserByEmail(String email) {
+        try (Connection c = ConnectionUtil.getConnection()) {
+            logString = String.format("Attempting to retrieve user with email of %s...", email);
+            LoggerUtil.log(logString, LogLevel.INFO);
+            String query = "select * from users where uname = ?";
+            PreparedStatement ps = c.prepareStatement(query);
 
+            ps.setString(1, email);
+            ResultSet rs = ps.executeQuery();
+            rs.next();
+
+            User u = new User(rs.getInt("id"), rs.getString("fname"), rs.getString("lname"), rs.getString("email"), rs.getString("uname"), rs.getBytes("hash"), rs.getBytes("salt"), Roles.from(rs.getInt("role_id")));
+            logString = String.format("Retrieved user %s.", u.getUsername());
+
+            LoggerUtil.log(logString, LogLevel.INFO);
+            return u;
+
+        } catch (SQLException e) {
+            logString = String.format("Could not retrieve user. More information: %s", ExceptionUtils.getMessage(e));
+            LoggerUtil.log(logString, LogLevel.ERROR);
+            e.printStackTrace();
+
+        }
+        return null;
+    }
     @Override
     public List<User> getAllUsers() {
         try (Connection c = ConnectionUtil.getConnection()) {
             logString = "Attempting to retrieve all the users in the database...";
-            LoggerUtil.log(logString, LogLevel.INFO);
-            String query = "select * from users";
+            // LoggerUtil.log(logString, LogLevel.INFO);
+            String query = "select * from soulnotes.users";
             PreparedStatement ps = c.prepareStatement(query);
             ResultSet rs = ps.executeQuery();
 
             List<User> users = new ArrayList<>();
             while (rs.next()) {
-                User u = new User(rs.getInt("id"), rs.getString("fname"), rs.getString("lname"), rs.getString("email"), rs.getString("uname"), rs.getString("pword"), Roles.from(rs.getInt("role_id")));
+                User u = new User(rs.getInt("id"), rs.getString("fname"), rs.getString("lname"), rs.getString("email"), rs.getString("uname"), rs.getBytes("hash"), rs.getBytes("salt"), Roles.from(rs.getInt("role_id")));
                 users.add(u);
             }
             logString = "Retrieved all users in the database.";
-            LoggerUtil.log(logString, LogLevel.INFO);
+            // LoggerUtil.log(logString, LogLevel.INFO);
             return users;
         } catch (SQLException e) {
             logString = String.format("Could not retrieve all users in the database. More information: %s", ExceptionUtils.getMessage(e));
             e.printStackTrace();
-            LoggerUtil.log(logString, LogLevel.ERROR);
+            // LoggerUtil.log(logString, LogLevel.ERROR);
         }
         return null;
     }
@@ -131,7 +160,7 @@ public class UserDaoPostgres implements UserDAO {
         try (Connection c = ConnectionUtil.getConnection()) {
             logString = String.format("Attempting to update user with id of %d", user.getUserId());
             LoggerUtil.log(logString, LogLevel.INFO);
-            String query = "update users set fname = ?, lname = ?, email = ?, uname = ?, pword = ?, role_id = ? where id = ?";
+            String query = "update users set fname = ?, lname = ?, email = ?, uname = ?, hash = ?, salt = ?, role_id = ? where id = ?";
             PreparedStatement ps = c.prepareStatement(query);
             User oldUser = user;
 
@@ -139,7 +168,7 @@ public class UserDaoPostgres implements UserDAO {
             ps.setString(2, user.getLastName());
             ps.setString(3, user.getEmail());
             ps.setString(4, user.getUsername());
-            ps.setString(5, user.getPassword());
+            //ps.setString(5, user.getPasswordHash());
             ps.setInt(6, user.getRoleId());
             ps.setInt(7, user.getUserId());
 

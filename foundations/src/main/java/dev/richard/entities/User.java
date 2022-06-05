@@ -1,12 +1,15 @@
 package dev.richard.entities;
 
+import java.util.Arrays;
+
 public class User {
     private int userId;
     private String firstName;
     private String lastName;
     private String email;
     private String username;
-    private String password;
+    private byte[] passwordHash;
+    private byte[] salt;
     private int roleId;
 
     private Roles roleType;
@@ -22,16 +25,17 @@ public class User {
      * @param lastName
      * @param email
      * @param username
-     * @param password
+     * @param passwordHash
      * @param roleType
      */
-    public User(int userId, String firstName, String lastName, String email, String username, String password, Roles roleType) {
+    public User(int userId, String firstName, String lastName, String email, String username, byte[] passwordHash, byte[] salt, Roles roleType) {
         this.userId = userId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.username = username;
-        this.password = password;
+        this.passwordHash = passwordHash;
+        this.salt = salt;
         this.roleType = roleType;
     }
 
@@ -75,12 +79,19 @@ public class User {
         this.username = username;
     }
 
-    public String getPassword() {
-        return password;
+    public byte[] getPasswordHash() {
+        return passwordHash;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setPasswordHash(byte[] passwordHash) {
+        this.passwordHash = passwordHash;
+    }
+    public byte[] getSalt() {
+        return salt;
+    }
+
+    public void setSalt(byte[] salt) {
+        this.salt = salt;
     }
 
     public Roles getRoleType() {
@@ -107,7 +118,8 @@ public class User {
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
                 ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
+                ", passwordHash='" + Arrays.toString(passwordHash) + '\'' +
+                ", salt='" + Arrays.toString(salt) + '\'' +
                 ", roleId=" + roleId +
                 ", roleType=" + roleType +
                 '}';

@@ -29,6 +29,8 @@ public interface UserDAO {
 
     User getUserByUsername(String username);
 
+    User getUserByEmail(String email);
+
     /**
      * Gets all users in the database.
      * @return java.util.List
@@ -53,8 +55,8 @@ public interface UserDAO {
 
     /**
      * 
-     * @param username
-     * @return
+     * @param username The username to delete.
+     * @return null if successful
      */
     User deleteUserByUsername(String username);
 }
