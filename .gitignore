@@ -5,8 +5,8 @@ foundations/.idea/**/usage.statistics.xml
 foundations/.idea/**/dictionaries
 foundations/.idea/**/shelf
 foundations/.idea/discord.xml
-
-
+foundations/.idea/workspace.xml
+foundations/src/main/resources
 out/
 foundations/target/
 log.log
