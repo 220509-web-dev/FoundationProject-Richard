@@ -1,5 +1,7 @@
 package dev.richard.entities;
 
+import dev.richard.utils.GenerationUtil;
+
 import java.util.Arrays;
 
 public class User {
@@ -8,11 +10,15 @@ public class User {
     private String lastName;
     private String email;
     private String username;
+    private String password;
     private byte[] passwordHash;
     private byte[] salt;
     private int roleId;
 
     private Roles roleType;
+    private Password passGen;
+
+
 
     public User() {
 
@@ -26,6 +32,7 @@ public class User {
      * @param email
      * @param username
      * @param passwordHash
+     * @param salt
      * @param roleType
      */
     public User(int userId, String firstName, String lastName, String email, String username, byte[] passwordHash, byte[] salt, Roles roleType) {
@@ -37,6 +44,32 @@ public class User {
         this.passwordHash = passwordHash;
         this.salt = salt;
         this.roleType = roleType;
+    }
+/**
+ * Constructor for making a new user.
+ * @param userId
+ * @param firstName
+ * @param lastName
+ * @param email
+ * @param username
+ * @param password
+ * @param roleId
+ */
+    public User(int userId, String firstName, String lastName, String email, String username, String password) {
+        this.userId = userId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.username = username;
+        this.password = password;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public int getUserId() {
@@ -84,6 +117,9 @@ public class User {
     }
 
     public void setPasswordHash(byte[] passwordHash) {
+        if (password != null) {
+
+        }
         this.passwordHash = passwordHash;
     }
     public byte[] getSalt() {
@@ -99,7 +135,7 @@ public class User {
     }
 
     public void setRoleType(Roles roleType) {
-        this.roleType = roleType;
+        this.roleType = Roles.from(roleId);
     }
 
     public int getRoleId() {

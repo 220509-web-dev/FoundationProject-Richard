@@ -15,7 +15,7 @@ public class ContextLoaderListener implements ServletContextListener {
     public void contextInitialized(ServletContextEvent sce) {
         ObjectMapper mapper = new ObjectMapper();
         UserDAO userDAO = new UserDaoPostgres();
-        UserServlet userServlet = new UserServlet(mapper);
+        UserServlet userServlet = new UserServlet(mapper, userDAO);
         ServletContext context = sce.getServletContext();
 
         ServletRegistration.Dynamic registration = context.addServlet("UserServlet", userServlet);

@@ -5,12 +5,15 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
+import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
+import java.util.Base64;
+import java.util.Random;
 
-public class PasswordUtil {
+public class GenerationUtil {
     public static Password generatePassword(String password) {
         KeySpec keySpec;
 
@@ -23,8 +26,7 @@ public class PasswordUtil {
         try {
             factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
             byte[] hash = factory.generateSecret(keySpec).getEncoded();
-            Password generated = new Password(hash, salt);
-            return generated;
+            return new Password(hash, salt);
         } catch (NoSuchAlgorithmException e) {
             LoggerUtil.log(ExceptionUtils.getMessage(e), LogLevel.ERROR);
             return null;
@@ -40,14 +42,21 @@ public class PasswordUtil {
         try {
             factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
             byte[] hash = factory.generateSecret(keySpec).getEncoded();
-            Password generated = new Password(hash, salt);
-            return generated;
-        } catch (NoSuchAlgorithmException e) {
-            LoggerUtil.log(ExceptionUtils.getMessage(e), LogLevel.ERROR);
-            return null;
-        } catch (InvalidKeySpecException e) {
+            return new Password(hash, salt);
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
             LoggerUtil.log(ExceptionUtils.getMessage(e), LogLevel.ERROR);
             return null;
         }
+    }
+    public static String generateResetToken() {
+        char[] validChars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
+        Random r = new SecureRandom();
+
+        StringBuilder token = new StringBuilder();
+
+        for (int i = 0; i < 64; i++) {
+            token.append(validChars[r.nextInt(validChars.length)]);
+        }
+        return new String(Base64.getEncoder().encode(token.toString().getBytes()));
     }
 }

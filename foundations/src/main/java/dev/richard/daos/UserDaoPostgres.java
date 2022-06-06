@@ -6,9 +6,9 @@ import dev.richard.entities.User;
 import dev.richard.exceptions.EmailAlreadyUsedException;
 import dev.richard.exceptions.UsernameAlreadyUsedException;
 import dev.richard.utils.ConnectionUtil;
+import dev.richard.utils.GenerationUtil;
 import dev.richard.utils.LogLevel;
 import dev.richard.utils.LoggerUtil;
-import dev.richard.utils.PasswordUtil;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import java.sql.*;
@@ -26,6 +26,7 @@ public class UserDaoPostgres implements UserDAO {
             String query = "insert into users values (default, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement ps = c.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 
+
             // Get all values from the input
             ps.setString(1, user.getFirstName());
             ps.setString(2, user.getLastName());
@@ -41,6 +42,7 @@ public class UserDaoPostgres implements UserDAO {
 
             int newId = rs.getInt("id");
             user.setUserId(newId);
+            System.out.println(user);
             logString = String.format("Added new user with the username %s and id of %d", user.getUsername(), user.getUserId());
             LoggerUtil.log(logString, LogLevel.INFO);
             return user;
