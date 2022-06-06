@@ -20,11 +20,7 @@ public class App {
     public static void main(String[] args) {
         Password generated = PasswordUtil.generatePassword("testing");
         User u = new User(0, "Zumi", "Daxuya", "zumid@testing.com", "zumid", generated.getHash(), generated.getSalt(), Roles.BASIC);
-        try {
-            new UserDaoPostgres().createUser(u);
-            System.out.println("Added!");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        new UserDaoPostgres().createUser(u);
+
     }
 }

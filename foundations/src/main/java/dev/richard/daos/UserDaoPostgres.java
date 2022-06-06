@@ -58,7 +58,7 @@ public class UserDaoPostgres implements UserDAO {
         try (Connection c = ConnectionUtil.getConnection()) {
             logString = String.format("Attempting to retrieve user with id of %d...", id);
             LoggerUtil.log(logString, LogLevel.INFO);
-            String query = "select * from users where id = ?";
+            String query = "select * from soulnotes.users where id = ?";
             PreparedStatement ps = c.prepareStatement(query);
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
