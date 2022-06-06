@@ -8,23 +8,36 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.time.LocalDateTime;
+import java.util.Properties;
 
 public class LoggerUtil {
+    private Properties props = new Properties();
+    private String logInfo;
+    private static LoggerUtil loggerUtil;
+    public static LoggerUtil getInstance() {
+        if (loggerUtil == null) loggerUtil = new LoggerUtil();
+        return loggerUtil;
+    }
+    private LoggerUtil() {
+        try {
+            props.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("application.properties"));
+        } catch (Exception e) {
+            throw new RuntimeException("Could not find property from properties file.");
+        }
+    }
     /**
-     * Logs information about the program to a file. Requires that the LOG_FILE environment variable be set correctly.
+     * Logs information about the program to a file. Requires that the application.properties file be set correctly.
      * @param message The message to log.
      * @param level The severity of the message.
      */
-    public static void log(String message, LogLevel level) {
-        String logInfo;
-        Path location = Paths.get(System.getenv("LOG_FILE"));
+    public void log(String message, LogLevel level) {
         try {
-            if (!Files.exists(location)) {
-                logInfo = String.format("%s - %s - %s\n",level.name(), "Log file created.", LocalDateTime.now());
-                Files.write(Paths.get(System.getenv("LOG_FILE")), logInfo.getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE_NEW);
+            if (!Files.exists(Paths.get(props.getProperty("log-dir")))) {
+                logInfo = String.format("[%s]: %s - %s\n", level.name(), "Created new log.", LocalDateTime.now());
+                Files.write(Paths.get(props.getProperty("log-dir")), logInfo.getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE_NEW);
             }
-            logInfo = String.format("%s - %s - %s\n",level.name(), message, LocalDateTime.now());
-            Files.write(Paths.get(System.getenv("LOG_FILE")), logInfo.getBytes(StandardCharsets.UTF_8), StandardOpenOption.APPEND);
+            logInfo = String.format("%s - %s - %s\n", level.name(), message, LocalDateTime.now());
+            Files.write(Paths.get(props.getProperty("log-dir")), logInfo.getBytes(StandardCharsets.UTF_8), StandardOpenOption.APPEND);
         } catch (IOException e) {
             e.printStackTrace();
         }

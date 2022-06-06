@@ -1,9 +1,22 @@
 package dev.richard.utils;
+import org.postgresql.core.ConnectionFactory;
+import org.postgresql.core.QueryExecutor;
+import org.postgresql.util.HostSpec;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Properties;
 
 public class ConnectionUtil {
+    private static ConnectionUtil connectionUtil;
+    private Properties props = new Properties();
+
+    public static ConnectionUtil getInstance() {
+        if (connectionUtil == null) connectionUtil = new ConnectionUtil();
+        return connectionUtil;
+    }
+
     static {
         try {
             Class.forName("org.postgresql.Driver");
@@ -12,14 +25,26 @@ public class ConnectionUtil {
             throw new RuntimeException(e); // fail fast
         }
     }
+
+    private ConnectionUtil() {
+        try {
+            props.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("application.properties"));
+        } catch (Exception e) {
+            System.err.println("Failed to load database credentials from property file.");
+            throw new RuntimeException(e); // fail fast for easier debugging
+        }
+    }
     /**
-     * Attempts a connection to the Postgres database. Requires that the DB_CONNECTION variable is set correctly.
+     * Attempts a connection to the Postgres database. Requires that the application.properties is set correctly.
      * @return java.sql.Connection
      */
-    public static Connection getConnection() {
+    public Connection getConnection() {
         try {
-            String dbInfo = System.getenv("DB_CONNECTION");
-            return DriverManager.getConnection(dbInfo);
+            Connection conn = DriverManager.getConnection(props.getProperty("db-url"),
+                                                          props.getProperty("db-username"),
+                                                          props.getProperty("db-password"));
+            if (conn == null) throw new RuntimeException("Could not establish a database to the connection.");
+            return conn;
 
         } catch (SQLException e) {
             e.printStackTrace();
