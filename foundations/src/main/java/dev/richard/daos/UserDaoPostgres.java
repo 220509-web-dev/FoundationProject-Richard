@@ -68,7 +68,7 @@ public class UserDaoPostgres implements UserDAO {
         try (Connection c = ConnectionUtil.getInstance().getConnection()) {
             logString = String.format("Attempting to retrieve user with id of %d...", id);
             LoggerUtil.getInstance().log(logString, LogLevel.INFO);
-            String query = "select * from soulnotes.users where id = ?";
+            String query = "select * from users where id = ?";
             PreparedStatement ps = c.prepareStatement(query);
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
@@ -94,7 +94,7 @@ public class UserDaoPostgres implements UserDAO {
         try (Connection c = ConnectionUtil.getInstance().getConnection()) {
             logString = String.format("Attempting to retrieve user with username of %s...", username);
             LoggerUtil.getInstance().log(logString, LogLevel.INFO);
-            String query = "select * from soulnotes.users where uname = ?";
+            String query = "select * from users where uname = ?";
             PreparedStatement ps = c.prepareStatement(query);
 
             ps.setString(1, username);
@@ -145,7 +145,7 @@ public class UserDaoPostgres implements UserDAO {
         try (Connection c = ConnectionUtil.getInstance().getConnection()) {
             logString = "Attempting to retrieve all the users in the database...";
             // LoggerUtil.getInstance().log(logString, LogLevel.INFO);
-            String query = "select * from soulnotes.users";
+            String query = "select * from users";
             PreparedStatement ps = c.prepareStatement(query);
             ResultSet rs = ps.executeQuery();
 

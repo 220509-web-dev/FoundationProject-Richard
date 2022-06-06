@@ -45,7 +45,7 @@ public class AuthServlet extends HttpServlet {
             System.out.printf("Generated hash of %s: %s\n", providedUser, new String(generatedPassword.getHash(), StandardCharsets.UTF_8));
             System.out.println(providedUser.equals(u.getUsername()) && u.getPasswordHash().equals(generatedPassword.getHash()));
             if (providedUser.equals(u.getUsername()) && Arrays.equals(u.getPasswordHash(), generatedPassword.getHash())) {
-                // LoggerUtil.log("Found user.", LogLevel.INFO);
+                // LoggerUtil.getInstance().log("Found user.", LogLevel.INFO);
                 System.out.println("Found user.");
 
                 resp.setStatus(200);
