@@ -5,6 +5,7 @@ import dev.richard.soulnotes.dtos.ResourceCreationResponse;
 import dev.richard.soulnotes.entities.User;
 import dev.richard.soulnotes.exceptions.EmailAlreadyUsedException;
 import dev.richard.soulnotes.exceptions.InvalidCredentialsException;
+import dev.richard.soulnotes.exceptions.UserNotFoundException;
 import dev.richard.soulnotes.exceptions.UsernameAlreadyUsedException;
 
 import java.util.List;
@@ -39,4 +40,19 @@ public class UserService {
 
         return new ResourceCreationResponse(userDAO.createUser(user).getUserId());
     }
+
+    public List<User> getUsers() {
+        return users;
+    }
+    public User getUserByUsername(String username) {
+        User u = userDAO.getUserByUsername(username);
+
+        if (u == null) throw new UserNotFoundException("Cannot find user with provided username.");
+
+        return u;
+     }
+     public User getUserById(int id) {
+        User u = userDAO.getUserById(id);
+        if (u == null) throw new UserNotFoundException("Cannot find user with provided username.");
+     }
 }
