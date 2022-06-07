@@ -3,8 +3,9 @@
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
              http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
-    <display-name>Testing</display-name>
+    <display-name>Soulnotes</display-name>
+    <welcome-file>index.html</welcome-file>
     <listener>
-        <listener-class>dev.richard.utils.ContextLoaderListener</listener-class>
+        <listener-class>dev.richard.soulnotes.utils.ContextLoaderListener</listener-class>
     </listener>
 </web-app>

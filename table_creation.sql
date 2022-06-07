@@ -1,5 +1,5 @@
-create schema foundation_app;
-set search_path to foundation_app;
+create schema soulnotes;
+set search_path to soulnotes;
 
 create table user_access (
     id          int generated always as identity primary key,           -- access role id
@@ -12,7 +12,8 @@ create table users ( -- make the users
     lname       varchar not null,                                       -- last name
     email       varchar unique not null,                                -- email
     uname       varchar unique not null check (length(uname) > 3),      -- username
-    pword       varchar not null check (length(pword) > 3),             -- password
+    hash        bytea not null,                                         -- password
+    salt        bytea not null,
     role_id     int,                                                    -- access role they have
 
     constraint user_access_fk
