@@ -8,9 +8,11 @@ function login() {
     fetch('/soulnotes/auth', {
         method: 'POST',
         body: JSON.stringify({username, password})
-    }).then(() => {
-        alert('Signed in successfully!');
-    }).catch(() => {
-        alert('oops');
+    }).then(resp => {
+        if (resp.status == 200) {
+            alert(`Signed in! Welcome, ${username}!`);
+        } else {
+            alert('Invalid credentials provided. Please try again.');
+        }
     });
-}
+};
