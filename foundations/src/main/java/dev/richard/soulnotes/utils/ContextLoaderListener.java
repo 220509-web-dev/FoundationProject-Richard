@@ -3,6 +3,7 @@ package dev.richard.soulnotes.utils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.richard.soulnotes.daos.UserDAO;
 import dev.richard.soulnotes.daos.UserDaoPostgres;
+import dev.richard.soulnotes.services.UserService;
 import dev.richard.soulnotes.servlets.AuthServlet;
 import dev.richard.soulnotes.servlets.UserServlet;
 
@@ -13,7 +14,8 @@ public class ContextLoaderListener implements ServletContextListener {
     public void contextInitialized(ServletContextEvent sce) {
         ObjectMapper mapper = new ObjectMapper();
         UserDAO userDAO = new UserDaoPostgres();
-        UserServlet userServlet = new UserServlet(mapper, userDAO);
+        UserService service = new UserService(userDAO);
+        UserServlet userServlet = new UserServlet(mapper, userDAO, service);
         ServletContext context = sce.getServletContext();
 
         ServletRegistration.Dynamic registration = context.addServlet("UserServlet", userServlet);

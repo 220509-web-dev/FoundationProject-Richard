@@ -6,6 +6,7 @@ import dev.richard.soulnotes.daos.UserDAO;
 import dev.richard.soulnotes.entities.Password;
 import dev.richard.soulnotes.entities.Roles;
 import dev.richard.soulnotes.entities.User;
+import dev.richard.soulnotes.services.UserService;
 import dev.richard.soulnotes.utils.GenerationUtil;
 import dev.richard.soulnotes.utils.LogLevel;
 import dev.richard.soulnotes.utils.LoggerUtil;
@@ -24,9 +25,11 @@ public class UserServlet extends HttpServlet {
     private final UserDAO userDAO;
     private List<User> userList;
     private String logString;
-    public UserServlet(ObjectMapper m, UserDAO u) {
+    private final UserService userService;
+    public UserServlet(ObjectMapper m, UserDAO u, UserService service) {
         mapper = m;
         userDAO = u;
+        userService = service;
         userList = u.getAllUsers();
     }
     @Override
@@ -77,13 +80,10 @@ public class UserServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
             User user = mapper.readValue(req.getInputStream(), User.class);
-            Password password = GenerationUtil.generatePassword(user.getPassword());
-            user.setPasswordHash(password.getHash());
-            user.setSalt(password.getSalt());
-            user.setRoleId(1);
-            user.setRoleType(Roles.BASIC);
+            /*user.setRoleId(1);
+            user.setRoleType(Roles.BASIC);*/
             System.out.println("servlet: " + user);
-            userDAO.createUser(user);
+            userService.createUser(user);
             System.out.println("user created!");
 
             resp.setStatus(204);
