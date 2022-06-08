@@ -32,11 +32,10 @@ function register() {
             password
         })
     }).then(resp => {
-        if (resp.status == 204) {
-            alert(`Registered successfully! Welcome, ${username}!`);
-            window.location.href = '/soulnotes/'; //todo: move this to user dashboard
-        } else {
-            alert('An error occurred while making the user.');
+        return resp.json();
+    }).then(data => {
+        if (data.code == 409) {
+            alert(data['message']);
         }
     }).catch(e => {
         alert(e);

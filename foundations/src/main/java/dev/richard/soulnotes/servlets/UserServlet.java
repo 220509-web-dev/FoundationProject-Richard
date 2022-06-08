@@ -1,11 +1,14 @@
 package dev.richard.soulnotes.servlets;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dev.richard.soulnotes.daos.UserDAO;
+import dev.richard.soulnotes.dtos.ErrorResponse;
 import dev.richard.soulnotes.entities.Password;
 import dev.richard.soulnotes.entities.Roles;
 import dev.richard.soulnotes.entities.User;
+import dev.richard.soulnotes.exceptions.EmailAlreadyUsedException;
 import dev.richard.soulnotes.services.UserService;
 import dev.richard.soulnotes.utils.GenerationUtil;
 import dev.richard.soulnotes.utils.LogLevel;
@@ -22,6 +25,8 @@ import java.util.stream.Collectors;
 
 public class UserServlet extends HttpServlet {
     private final ObjectMapper mapper;
+    private ObjectNode nodes;
+    private ErrorResponse error;
     private final UserDAO userDAO;
     private List<User> userList;
     private String logString;
@@ -50,7 +55,7 @@ public class UserServlet extends HttpServlet {
         if (username != null) {
             userList = userList.stream().filter(user -> user.getUsername().equals(username)).collect(Collectors.toList());
         }
-        ObjectNode nodes = mapper.createObjectNode();
+        nodes = mapper.createObjectNode();
         if (userList.isEmpty()) {
             nodes.put("code", 400);
             nodes.put("message", "No users exist with provided info.");
@@ -83,6 +88,16 @@ public class UserServlet extends HttpServlet {
             /*user.setRoleId(1);
             user.setRoleType(Roles.BASIC);*/
             System.out.println("servlet: " + user);
+            User potentialUser = userDAO.getUserByUsername(user.getUsername());
+            if (potentialUser != null) {
+                error = new ErrorResponse(409, "This username is already in use.");
+                resp.setContentType("application/json");
+                resp.setStatus(409);
+                resp.getWriter().write(error.generateErrors(mapper));
+                return;
+            }
+            potentialUser = userDAO.getUserByEmail(user.getEmail());
+            if (potentialUser != null) throw new EmailAlreadyUsedException("This email is already in use.");
             userService.createUser(user);
             System.out.println("user created!");
 

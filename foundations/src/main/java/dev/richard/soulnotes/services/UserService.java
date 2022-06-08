@@ -1,7 +1,9 @@
 package dev.richard.soulnotes.services;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import dev.richard.soulnotes.daos.UserDAO;
-import dev.richard.soulnotes.dtos.ResourceCreationResponse;
+import dev.richard.soulnotes.dtos.*;
 import dev.richard.soulnotes.entities.Password;
 import dev.richard.soulnotes.entities.Roles;
 import dev.richard.soulnotes.entities.User;
@@ -17,13 +19,15 @@ import java.util.stream.Collectors;
 public class UserService {
     private final UserDAO userDAO;
     private String exceptionMsg;
+    private ErrorResponse error;
     private List<User> users;
+    ObjectNode responseNodes;
     public UserService(UserDAO userDAO) {
         this.userDAO = userDAO;
-        users = userDAO.getAllUsers();
     }
 
     public ResourceCreationResponse createUser(User user) {
+
         if (user == null || user.getFirstName() == null || user.getFirstName().equals("") ||
                 user.getLastName() == null || user.getLastName().equals("") ||
                 user.getUsername() == null || user.getUsername().equals("") ||
@@ -32,10 +36,7 @@ public class UserService {
             exceptionMsg = "Provided information must not be null.";
             throw new InvalidCredentialsException(exceptionMsg);
         }
-        User potentialUser = userDAO.getUserByUsername(user.getUsername());
-        if (potentialUser != null) throw new UsernameAlreadyUsedException("This username is already in use.");
-        potentialUser = userDAO.getUserByEmail(user.getEmail());
-        if (potentialUser != null) throw new EmailAlreadyUsedException("This email is already in use.");
+
 
 
         if (user.getUsername().length() < 3) throw new InvalidCredentialsException("Username must be at least 4 characters.");
