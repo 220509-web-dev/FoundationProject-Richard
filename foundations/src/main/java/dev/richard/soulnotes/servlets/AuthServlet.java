@@ -30,8 +30,13 @@ public class AuthServlet extends HttpServlet {
 
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doDelete(req, resp);
-    }
+        HttpSession session = req.getSession(false);
+
+        if (session != null) {
+            session.invalidate();
+        }
+
+        resp.setStatus(204);    }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
