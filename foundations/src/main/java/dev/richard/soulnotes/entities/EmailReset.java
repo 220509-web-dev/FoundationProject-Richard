@@ -15,6 +15,12 @@ public class EmailReset {
         this.expiration = LocalDateTime.now().plus(Duration.of(10, ChronoUnit.MINUTES));
     }
 
+    public EmailReset(int userId, String resetToken, LocalDateTime expiration) {
+        this.userId = userId;
+        this.resetToken = resetToken;
+        this.expiration = expiration;
+    }
+
     public int getUserId() {
         return userId;
     }
