@@ -36,7 +36,6 @@ public class GenerationUtil {
     }
     public static Password generatePassword(String password, byte[] salt) {
         SecretKeyFactory factory;
-        SecureRandom random = new SecureRandom();
         KeySpec keySpec = new PBEKeySpec(password.toCharArray(), salt, 65536, 128);
         try {
             factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");

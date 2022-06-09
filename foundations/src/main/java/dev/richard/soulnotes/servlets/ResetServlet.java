@@ -47,13 +47,9 @@ public class ResetServlet extends HttpServlet {
             resp.getWriter().write(errorResponse.generateErrors(objectMapper));
             return;
         }
-        ObjectNode jsonNodes = objectMapper.createObjectNode();
-        jsonNodes.put("userId", reset.getUserId());
-        jsonNodes.put("token", reset.getResetToken());
+        resp.addHeader("token", reset.getResetToken());
+        resp.addHeader("expiration", reset.getExpiration().toString());
         resp.sendRedirect("update.html");
 
-        resp.setStatus(200);
-        resp.setContentType("application/json");
-        resp.getWriter().write(objectMapper.writeValueAsString(jsonNodes));
     }
 }
