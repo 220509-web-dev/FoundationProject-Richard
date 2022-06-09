@@ -115,7 +115,7 @@ public class UserDaoPostgres implements UserDAO {
         try (Connection c = ConnectionUtil.getInstance().getConnection()) {
             logString = String.format("Attempting to retrieve user with email of %s...", email);
             LoggerUtil.getInstance().log(logString, LogLevel.INFO);
-            String query = "select * from users where uname = ?";
+            String query = "select * from users where email = ?";
             PreparedStatement ps = c.prepareStatement(query);
 
             ps.setString(1, email);
