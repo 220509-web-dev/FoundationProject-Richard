@@ -97,10 +97,14 @@ public class UserServlet extends HttpServlet {
                 return;
             }
             potentialUser = userDAO.getUserByEmail(user.getEmail());
-            if (potentialUser != null) throw new EmailAlreadyUsedException("This email is already in use.");
+            if (potentialUser != null) {
+                error = new ErrorResponse(409, "This email is already in use.");
+                resp.setContentType("application/json");
+                resp.setStatus(409);
+                resp.getWriter().write(error.generateErrors(mapper));
+                return;
+            }
             userService.createUser(user);
-            System.out.println("user created!");
-
             resp.setStatus(204);
 
         } catch (Exception e) {
