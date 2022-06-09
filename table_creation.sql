@@ -36,7 +36,7 @@ create table notes (
 create table reset_tokens (
     user_id int,
     token varchar unique not null,
-    datetime varchar not null
+    datetime varchar not null,
 
     constraint reset_id_fk
     foreign key (user_id)
