@@ -16,6 +16,9 @@ function sendEmail() {
         successMsgContainer.setAttribute('class', 'alert alert-success');
         successMsgContainer.innerText = 'Thank you! If your email matches a user, you\'ll get an email to reset your password.';
         document.getElementById('forgotPass').appendChild(successMsgContainer);
+        setTimeout(() => {
+            window.location.href = '/soulnotes/login.html';
+        }, 3000);
     });
 }
 function setError(message, o) {
