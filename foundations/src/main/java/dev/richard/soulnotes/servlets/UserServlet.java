@@ -21,6 +21,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class UserServlet extends HttpServlet {
@@ -39,39 +41,69 @@ public class UserServlet extends HttpServlet {
     @Override
     // Code adapted from Jeremy Smalls-Bushay.
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        userList = userDAO.getAllUsers();
-        String username = req.getParameter("username");
-        //Get user by Username
         try {
-            int userId = Integer.parseInt(req.getParameter("id"));
-            userList = userList.stream().filter(user -> user.getUserId() == userId).collect(Collectors.toList());
+            userList = userDAO.getAllUsers();
+            String username = req.getParameter("username");
+            if (username.isEmpty() || username.equals("") || req.getParameter("id").isEmpty() || req.getParameter("id").equals("")) {
+                ErrorResponse errorResponse = new ErrorResponse(409, "Invalid input.");
+                resp.setStatus(409);
+                resp.setContentType("application/json");
+                resp.getWriter().write(errorResponse.generateErrors(mapper));
+                return;
+            }
+            if (this.containsIllegals(req.getParameter("username")) || this.containsIllegals(req.getParameter("id"))) {
+                ErrorResponse errorResponse = new ErrorResponse(409, "Invalid input");
+                resp.setStatus(409);
+                resp.setContentType("application/json");
+                resp.getWriter().write(errorResponse.generateErrors(mapper));
+                return;
+            }
 
-        } catch (NumberFormatException e) {
-            logString = "Null or invalid input.";
-            LoggerUtil.getInstance().log(logString, LogLevel.ERROR);
-        }
+            //Get user by Username
+            try {
+                int userId = Integer.parseInt(req.getParameter("id"));
+                userList = userList.stream().filter(user -> user.getUserId() == userId).collect(Collectors.toList());
+            } catch (Exception e) {
+                logString = "Null or invalid input.";
+                LoggerUtil.getInstance().log(logString, LogLevel.ERROR);
+                return;
+            }
 
-        // filter userList based on username
-        if (username != null) {
-            userList = userList.stream().filter(user -> user.getUsername().equals(username)).collect(Collectors.toList());
-        }
-        nodes = mapper.createObjectNode();
-        if (userList.isEmpty()) {
-            nodes.put("code", 400);
-            nodes.put("message", "No users exist with provided info.");
-            nodes.put("timestamp", LocalDateTime.now().toString());
+            // filter userList based on username
+            if (username != null) {
+                userList = userList.stream().filter(user -> user.getUsername().equals(username)).collect(Collectors.toList());
+            }
+            nodes = mapper.createObjectNode();
+            if (userList.isEmpty()) {
+                nodes.put("code", 400);
+                nodes.put("message", "No users exist with provided info.");
+                nodes.put("timestamp", LocalDateTime.now().toString());
 
-            LoggerUtil.getInstance().log("No users exist with provided info.", LogLevel.ERROR);
-            String result = mapper.writeValueAsString(nodes);
+                LoggerUtil.getInstance().log("No users exist with provided info.", LogLevel.ERROR);
+                String result = mapper.writeValueAsString(nodes);
+                resp.setContentType("application/json");
+                resp.getWriter().write(result);
+                return;
+            }
+
+            String result = mapper.writeValueAsString(userList);
             resp.setContentType("application/json");
             resp.getWriter().write(result);
-            return;
+        } catch (Exception e) {
+            if (resp.getStatus() == 400) {
+                ErrorResponse errorResponse = new ErrorResponse(409, "Invalid input.");
+                resp.setStatus(409);
+                resp.setContentType("application/json");
+                resp.getWriter().write(errorResponse.generateErrors(mapper));
+                return;
+            }
+            ErrorResponse errorResponse = new ErrorResponse(409, "Invalid input.");
+            resp.setStatus(409);
+            resp.setContentType("application/json");
+            resp.getWriter().write(errorResponse.generateErrors(mapper));
+
+
         }
-
-        String result = mapper.writeValueAsString(userList);
-        resp.setContentType("application/json");
-        resp.getWriter().write(result);
-
     }
 
     @Override
@@ -116,6 +148,11 @@ public class UserServlet extends HttpServlet {
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         super.doDelete(req, resp);
+    }
+    public boolean containsIllegals(String toExamine) {
+        Pattern pattern = Pattern.compile("[`~#@*+%{}<>\\[\\]|\"\\_^]");
+        Matcher matcher = pattern.matcher(toExamine);
+        return matcher.find();
     }
 }
 
