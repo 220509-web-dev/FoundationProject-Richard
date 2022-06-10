@@ -5,6 +5,7 @@ import dev.richard.soulnotes.daos.UserDAO;
 import dev.richard.soulnotes.daos.UserDaoPostgres;
 import dev.richard.soulnotes.services.UserService;
 import dev.richard.soulnotes.servlets.AuthServlet;
+import dev.richard.soulnotes.servlets.EmailServlet;
 import dev.richard.soulnotes.servlets.ResetServlet;
 import dev.richard.soulnotes.servlets.UserServlet;
 
@@ -24,5 +25,6 @@ public class ContextLoaderListener implements ServletContextListener {
 
         context.addServlet("AuthServlet", new AuthServlet(mapper, userDAO)).addMapping("/auth");
         context.addServlet("ResetServlet", new ResetServlet(mapper, userDAO)).addMapping("/reset");
+        context.addServlet("EmailServlet", new EmailServlet(mapper, userDAO)).addMapping("/email");
     }
 }

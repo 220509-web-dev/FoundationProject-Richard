@@ -39,9 +39,9 @@ function register() {
             successMsgContainer.innerText = 'Registration successful! Redirecting...';
             document.getElementById('register').appendChild(successMsgContainer);
 
-            // setTimeout(() => {
-            //     window.location.href = '/soulnotes';
-            // }, 3000);
+            setTimeout(() => {
+                 window.location.href = '/soulnotes';
+             }, 3000);
             return;
         }
         return resp.json();

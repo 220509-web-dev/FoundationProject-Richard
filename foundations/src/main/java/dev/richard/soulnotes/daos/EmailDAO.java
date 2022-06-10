@@ -8,4 +8,5 @@ public interface EmailDAO {
     EmailReset getResetToken(int id);
     EmailReset getResetTokenByToken(String token);
     EmailReset getResetToken(String email);
+    void deleteResetToken(EmailReset reset);
 }

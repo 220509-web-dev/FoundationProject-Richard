@@ -91,4 +91,16 @@ public class EmailDaoPostgres implements EmailDAO {
         }
         return null;
     }
+
+    @Override
+    public void deleteResetToken(EmailReset reset) {
+        try (Connection c = ConnectionUtil.getInstance().getConnection()) {
+            String query = "delete from reset_tokens where token = ?";
+            PreparedStatement ps = c.prepareStatement(query);
+            ps.setString(1, reset.getResetToken());
+            ps.execute();
+        } catch (SQLException e) {
+            LoggerUtil.getInstance().log(ExceptionUtils.getStackTrace(e), LogLevel.ERROR);
+        }
+    }
 }
