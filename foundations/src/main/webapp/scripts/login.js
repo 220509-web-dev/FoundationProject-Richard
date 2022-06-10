@@ -24,8 +24,9 @@ function login() {
             successMsgContainer.innerText = 'Login successful! Redirecting...';
             document.getElementById('loginform').appendChild(successMsgContainer);
             setTimeout(() => {
-                window.location.href = '/soulnotes/login.html';
+                window.location.href = '/soulnotes/index.html';
             }, 3000);
+            return;
         } else {
             errorContainer.removeAttribute('hidden');
             errorContainer.innerText = 'Invalid credentials. Please check your input and try again.';

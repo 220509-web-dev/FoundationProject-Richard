@@ -35,11 +35,11 @@ public class UserServlet extends HttpServlet {
         mapper = m;
         userDAO = u;
         userService = service;
-        userList = u.getAllUsers();
     }
     @Override
     // Code adapted from Jeremy Smalls-Bushay.
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        userList = userDAO.getAllUsers();
         String username = req.getParameter("username");
         //Get user by Username
         try {

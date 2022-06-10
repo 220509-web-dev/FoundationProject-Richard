@@ -1,7 +1,7 @@
 window.onload = (() => {
     document.getElementById("register").addEventListener("click", register);
     document.getElementById("confirmPassword").addEventListener("click", (e) => {
-        if (e.key === 'Enter') register();
+        if (e.key === 'Enter') return register();
     });
 });
 

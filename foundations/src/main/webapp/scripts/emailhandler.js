@@ -1,5 +1,8 @@
 window.onload = (() => {
-    document.getElementById('send').addEventListener('click', sendEmail)
+    document.getElementById('reset').addEventListener('click', sendEmail)
+    document.getElementById('email').addEventListener('keyup', e => {
+        if (e.key === 'Enter') return sendEmail();
+    });
 });
 
 function sendEmail() {

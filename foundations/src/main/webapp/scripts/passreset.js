@@ -3,6 +3,10 @@ window.onload = (() => {
     fetch('/soulnotes/reset', {
         method:'POST' ,
         body: JSON.stringify(params.get('token'))
+    }).then(resp => {
+        if (resp.status == 409) {
+            window.location.assign("/soulnotes")
+        }
     });
     document.getElementById('update').addEventListener('click', update);
     document.getElementById('confirmPass').addEventListener('keyup', e => {
