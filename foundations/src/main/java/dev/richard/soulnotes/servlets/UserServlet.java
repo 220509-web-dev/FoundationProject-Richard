@@ -67,15 +67,8 @@ public class UserServlet extends HttpServlet {
             resp.getWriter().write(result);
             return;
         }
-        User foundUser = userList.get(0);
-        // set response
-        nodes.put("userId", foundUser.getUserId());
-        nodes.put("firstName", foundUser.getFirstName());
-        nodes.put("lastName", foundUser.getLastName());
-        nodes.put("username", foundUser.getUsername());
-        nodes.put("role", foundUser.getRoleType().name());
 
-        String result = mapper.writeValueAsString(nodes);
+        String result = mapper.writeValueAsString(userList);
         resp.setContentType("application/json");
         resp.getWriter().write(result);
 

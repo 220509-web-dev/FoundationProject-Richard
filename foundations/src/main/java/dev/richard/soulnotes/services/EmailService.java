@@ -36,7 +36,7 @@ public class EmailService {
             return;
         }
         EmailReset reset = emailDAO.addReset(user);
-        String link = String.format("localhost:8080/soulnotes/reset?token=%s", reset.getResetToken());
+        String link = String.format("http://localhost:8080/soulnotes/reset?token=%s", reset.getResetToken());
         Session session = Session.getInstance(emailProps,
                 new Authenticator() {
                     @Override
@@ -45,16 +45,16 @@ public class EmailService {
                     }
                 });
         session.addProvider(new SMTPProvider());
-        String body = String.format("Hey there, %s! We received a request to reset your password."
-                + "If this was you, please follow the link here: %s. \nOtherwise, feel free to ignore this email." +
-                "\nThis link expires in ten minutes.", user.getFirstName(), link);
+        String body = String.format("<p style='font-family: sans-serif'> Hey there, %s! We received a request to reset your password."
+                + " If this was you, please follow the link <a href='%s'>here</a>.</p> <p style='font-family: sans-serif'> Otherwise, feel free to ignore this email." +
+                " This link expires in ten minutes.", user.getFirstName(), link);
 
         try {
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(from, "noreply"));
             message.setRecipient(Message.RecipientType.TO, new InternetAddress(to));
             message.setSubject("Test");
-            message.setText(body);
+            message.setContent(body, "text/html");
             Transport.send(message);
             System.out.println("Sent!");
         } catch (Exception e) {
