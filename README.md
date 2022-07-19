@@ -1,4 +1,13 @@
 ## Revature Foundation Project No. 1
-Revature Foundation Project; created using Java, SQL, and Bootstrap.
 
 The Expense Reimbursement System (ERS) will manage the process of reimbursing employees for expenses incurred while on company time. All employees in the company can login and submit requests for reimbursement and view their past tickets and pending requests. Finance managers can log in and view all reimbursement requests and past history for all employees in the company. Finance managers are authorized to approve and deny requests for expense reimbursement.
+
+## Tech Stack
+- Java v8
+- Servlet API v4
+- JDBC
+- PostgreSQL DB
+- Docker (used to host local DB)
+- HTML
+- CSS/Bootstrap
+- JavaScript
