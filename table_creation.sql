@@ -32,3 +32,13 @@ create table notes (
     foreign key (owner_id)
     references users(id)
 );
+
+create table reset_tokens (
+    user_id int,
+    token varchar unique not null,
+    datetime varchar not null,
+
+    constraint reset_id_fk
+    foreign key (user_id)
+    references users(id)
+);
